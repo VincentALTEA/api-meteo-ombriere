@@ -1,20 +1,39 @@
 from flask import Flask, jsonify
 import pandas as pd
 
-df = pd.read_csv("donnees_meteo_communes.csv")
-
 app = Flask(__name__)
 
-@app.route("/")
-def home():
+# Chargement du fichier CSV une seule fois au démarrage
+try:
+    data = pd.read_csv("donnees_meteo_communes.csv", encoding='utf-8')
+except Exception as e:
+    print(f"Erreur lors du chargement du CSV : {e}")
+    data = pd.DataFrame()
+
+# Fonction de nettoyage des noms de commune
+def normaliser_nom(nom):
+    return str(nom).strip().lower().replace("-", " ").replace("’", "'").replace("é", "e").replace("è", "e")
+
+# Route racine
+@app.route('/')
+def accueil():
     return "API Météo pour dimensionnement d'ombrières photovoltaïques."
 
-@app.route("/commune/<nom_commune>")
-def get_infos_commune(nom_commune):
-    match = df[df["commune"].str.lower() == nom_commune.lower()]
-    if match.empty:
-        return jsonify({"erreur": "Commune non trouvée"}), 404
-    ligne = match.iloc[0]
+# Route de requête par commune
+@app.route('/commune/<nom_commune>')
+def obtenir_donnees(nom_commune):
+    if data.empty:
+        return jsonify({"error": "Fichier CSV non chargé"}), 500
+
+    nom_recherche = normaliser_nom(nom_commune)
+    data['nom_normalise'] = data['commune'].apply(normaliser_nom)
+
+    result = data[data['nom_normalise'] == nom_recherche]
+
+    if result.empty:
+        return jsonify({"error": f"Commune '{nom_commune}' introuvable dans la base."}), 404
+
+    ligne = result.iloc[0]
     return jsonify({
         "commune": ligne["commune"],
         "code_postal": ligne["code_postal"],
@@ -24,5 +43,6 @@ def get_infos_commune(nom_commune):
         "hors_gel": ligne["hors_gel"]
     })
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
+    
