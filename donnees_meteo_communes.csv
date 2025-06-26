@@ -1,0 +1,21 @@
+commune,code_postal,zone_neige,zone_vent,altitude,hors_gel
+Paris,75000,A1,1,35,0.6
+Marseille,13000,B1,3,25,0.6
+Lyon,69000,B1,2,173,0.8
+Toulouse,31000,B1,2,146,0.8
+Nice,06000,B2,3,10,0.6
+Nantes,44000,A2,1,30,0.6
+Strasbourg,67000,C1,2,139,0.8
+Montpellier,34000,B1,2,25,0.6
+Bordeaux,33000,A2,2,6,0.6
+Lille,59000,A1,1,18,0.6
+Rennes,35000,A2,1,38,0.6
+Reims,51100,A2,1,95,0.8
+Saint-Étienne,42000,C1,2,422,1.0
+Le Havre,76600,A2,2,5,0.6
+Grenoble,38000,C1,2,214,1.0
+Dijon,21000,B1,1,245,1.0
+Angers,49000,A2,1,45,0.6
+Nîmes,30000,B1,2,47,0.6
+Villeurbanne,69100,B1,2,180,0.8
+Chamonix-Mont-Blanc,74400,D1,2,1035,1.2
